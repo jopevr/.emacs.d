@@ -6,7 +6,7 @@
 ;;; Code:
 (require 'package)
 (add-to-list 'package-archives
-	     '("melpa" . "https://melpa.org/packages/") t)
+             '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 
 (unless (package-installed-p 'use-package)
@@ -59,7 +59,7 @@
   "Delimit region with brackets; OPEN is the open bracket and CLOSE is the close bracket."
   (interactive)
   (let ((b (region-beginning))
-	(e (region-end)))
+        (e (region-end)))
     (let ((e (+ e 1)))
       (goto-char b)
       (insert open)
@@ -69,6 +69,27 @@
   (global-set-key (kbd "C-M-(") (lambda () (interactive) (delimit-region "(" ")")))
   (global-set-key (kbd "C-M-{") (lambda () (interactive) (delimit-region "{" "}")))
   (global-set-key (kbd "C-M-[") (lambda () (interactive) (delimit-region "[" "]"))))
+
+(defun out-parens-quotes ()
+  "Move the point forward if it is between quotes or parens."
+  (interactive)
+  (let ((char (string (char-after (point))))
+        (quotes "\"")
+        (squotes "'")
+        (parens ")")
+        (rparens "]")
+        (brackets "}"))
+    (if (string= char quotes)
+        (forward-char)
+      (if (string= char squotes)
+          (forward-char)
+        (if (string= char parens)
+            (forward-char)
+          (if (string= char rparens)
+              (forward-char)
+            (if (string= char brackets)
+                (forward-char))))))))
+(global-set-key (kbd "<C-tab>") 'out-parens-quotes)
 
 (defvar shell-mode-map)
 (defun shell-delete ()
@@ -127,8 +148,8 @@
   (add-hook 'after-init-hook 'global-company-mode)
   :bind
   (:map company-active-map
-	("C-n" . company-select-next-or-abort)
-	("C-p" . company-select-previous-or-abort))
+        ("C-n" . company-select-next-or-abort)
+        ("C-p" . company-select-previous-or-abort))
   :config
   (setq company-idle-delay 0))
 
