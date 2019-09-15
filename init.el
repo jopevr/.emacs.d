@@ -98,8 +98,8 @@
 (defvar shell-mode-map)
 (defun shell-delete ()
   "Delete shell window."
-  (define-key shell-mode-map (kbd "<C-return>") #'delete-window))
-(global-set-key (kbd "<C-return>") 'shell)
+  (define-key shell-mode-map (kbd "<C-escape>") #'delete-window))
+(global-set-key (kbd "<C-escape>") 'shell)
 (setq display-buffer-alist '(("\\*shell\\*" display-buffer-at-bottom)))
 (eval-after-load "shell" #'shell-delete)
 
@@ -202,11 +202,10 @@
   (add-hook 'irony-mode-hook #'irony-eldoc))
 ;; ------------------------------------------------------------
 ;; ------------------------------------------------------------
-(use-package company-jedi
+(use-package elpy
   :ensure t
-  :config
-  (eval-after-load 'company
-    '(add-to-list 'company-backends 'company-jedi)))
+  :init
+  (elpy-enable))
 ;; ------------------------------------------------------------
 ;; ------------------------------------------------------------
 (use-package bash-completion
