@@ -6,7 +6,7 @@
 ;;; Code:
 (require 'package)
 (add-to-list 'package-archives
-             '("melpa" . "https://melpa.org/packages/") t)
+	     '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 
 (unless (package-installed-p 'use-package)
@@ -59,7 +59,7 @@
   "Delimit region with brackets; OPEN is the open bracket and CLOSE is the close bracket."
   (interactive)
   (let ((b (region-beginning))
-        (e (region-end)))
+	(e (region-end)))
     (let ((e (+ e 1)))
       (goto-char b)
       (insert open)
@@ -74,25 +74,25 @@
   "Move the point forward if it is between quotes or parens."
   (interactive)
   (let ((next (string (following-char)))
-        (quotes "\"")
-        (squotes "'")
-        (parens ")")
-        (rparens "]")
-        (brackets "}"))
+	(quotes "\"")
+	(squotes "'")
+	(parens ")")
+	(rparens "]")
+	(brackets "}"))
     (while (not (or (string= next quotes)
-                    (string= next squotes)
-                    (string= next parens)
-                    (string= next rparens)
-                    (string= next brackets)))
+		    (string= next squotes)
+		    (string= next parens)
+		    (string= next rparens)
+		    (string= next brackets)))
       (progn
-        (forward-char)
-        (setq next (string (following-char)))))
+	(forward-char)
+	(setq next (string (following-char)))))
     (if (or (string= next quotes)
-            (string= next squotes)
-            (string= next parens)
-            (string= next rparens)
-            (string= next brackets))
-        (forward-char))))
+	    (string= next squotes)
+	    (string= next parens)
+	    (string= next rparens)
+	    (string= next brackets))
+	(forward-char))))
 (global-set-key (kbd "<C-tab>") 'out-parens-quotes)
 
 (defvar shell-mode-map)
@@ -152,8 +152,8 @@
   (add-hook 'after-init-hook 'global-company-mode)
   :bind
   (:map company-active-map
-        ("C-n" . company-select-next-or-abort)
-        ("C-p" . company-select-previous-or-abort))
+	("C-n" . company-select-next-or-abort)
+	("C-p" . company-select-previous-or-abort))
   :config
   (setq company-idle-delay 0))
 
@@ -161,6 +161,14 @@
   :ensure t
   :config
   (global-flycheck-mode 1))
+
+(use-package yasnippet
+  :ensure t
+  :config
+  (yas-global-mode 1))
+
+(use-package yasnippet-snippets
+  :ensure t)
 
 (use-package projectile
   :ensure t
@@ -208,9 +216,30 @@
   (elpy-enable))
 ;; ------------------------------------------------------------
 ;; ------------------------------------------------------------
+(use-package indium
+  :ensure t
+  :config
+  (add-hook 'js-mode-hook 'indium-interaction-mode)
+  (setq indium-chrome-executable "google-chrome-stable"))
+;; ------------------------------------------------------------
+;; ------------------------------------------------------------
 (use-package bash-completion
   :ensure t)
 ;; ------------------------------------------------------------
 ;; ------------------------------------------------------------
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (yasnippet-snippets yasnippet use-package irony-eldoc indium flycheck-irony elpy eclipse-theme counsel-projectile company-irony bash-completion ace-window))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
 
 ;;; init.el ends here
