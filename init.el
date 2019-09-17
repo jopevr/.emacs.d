@@ -6,7 +6,7 @@
 ;;; Code:
 (require 'package)
 (add-to-list 'package-archives
-	     '("melpa" . "https://melpa.org/packages/") t)
+             '("melpa" . "https://melpa.org/packages/") t)
 (package-initialize)
 
 (unless (package-installed-p 'use-package)
@@ -29,7 +29,7 @@
   (global-hl-line-mode 1)
   (setq-default display-line-numbers-width 4))
 
-(setq indent-tabs-mode nil)
+(setq-default indent-tabs-mode nil)
 
 (setq line-number-mode t
       column-number-mode t)
@@ -59,7 +59,7 @@
   "Delimit region with brackets; OPEN is the open bracket and CLOSE is the close bracket."
   (interactive)
   (let ((b (region-beginning))
-	(e (region-end)))
+        (e (region-end)))
     (let ((e (+ e 1)))
       (goto-char b)
       (insert open)
@@ -74,25 +74,25 @@
   "Move the point forward if it is between quotes or parens."
   (interactive)
   (let ((next (string (following-char)))
-	(quotes "\"")
-	(squotes "'")
-	(parens ")")
-	(rparens "]")
-	(brackets "}"))
+        (quotes "\"")
+        (squotes "'")
+        (parens ")")
+        (rparens "]")
+        (brackets "}"))
     (while (not (or (string= next quotes)
-		    (string= next squotes)
-		    (string= next parens)
-		    (string= next rparens)
-		    (string= next brackets)))
+                    (string= next squotes)
+                    (string= next parens)
+                    (string= next rparens)
+                    (string= next brackets)))
       (progn
-	(forward-char)
-	(setq next (string (following-char)))))
+        (forward-char)
+        (setq next (string (following-char)))))
     (if (or (string= next quotes)
-	    (string= next squotes)
-	    (string= next parens)
-	    (string= next rparens)
-	    (string= next brackets))
-	(forward-char))))
+            (string= next squotes)
+            (string= next parens)
+            (string= next rparens)
+            (string= next brackets))
+        (forward-char))))
 (global-set-key (kbd "<C-tab>") 'out-parens-quotes)
 
 (defvar shell-mode-map)
@@ -149,11 +149,11 @@
 (use-package company
   :ensure t
   :config
-  (add-hook 'after-init-hook 'global-company-mode)
+  (add-hook 'after-init-hook #'global-company-mode)
   :bind
   (:map company-active-map
-	("C-n" . company-select-next-or-abort)
-	("C-p" . company-select-previous-or-abort))
+        ("C-n" . company-select-next-or-abort)
+        ("C-p" . company-select-previous-or-abort))
   :config
   (setq company-idle-delay 0))
 
@@ -182,6 +182,12 @@
   :ensure t
   :config
   (counsel-projectile-mode 1))
+
+(use-package magit
+  :ensure t
+  :config
+  (global-set-key (kbd "C-x g") 'magit-status)
+  (global-set-key (kbd "C-x M-g") 'magit-dispatch))
 ;; ------------------------------------------------------------
 ;; ------------------------------------------------------------
 (use-package irony
@@ -234,7 +240,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (yasnippet-snippets yasnippet use-package irony-eldoc indium flycheck-irony elpy eclipse-theme counsel-projectile company-irony bash-completion ace-window))))
+    (yasnippet-snippets yasnippet use-package magit irony-eldoc indium flycheck-irony flycheck elpy eclipse-theme counsel-projectile company-irony bash-completion ace-window))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
