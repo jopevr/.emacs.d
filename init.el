@@ -240,7 +240,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (yasnippet-snippets yasnippet use-package magit irony-eldoc indium flycheck-irony flycheck elpy eclipse-theme counsel-projectile company-irony bash-completion ace-window))))
+    (yasnippet-snippets yasnippet use-package magit irony-eldoc indium flycheck-irony elpy eclipse-theme counsel-projectile company-irony bash-completion ace-window))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
