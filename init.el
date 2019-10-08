@@ -24,10 +24,16 @@
   (menu-bar-mode -1)
   (tool-bar-mode -1))
 
+(set-face-attribute 'default nil
+                    :family "Inconsolata"
+                    :height 110)
+
 (progn
   (global-display-line-numbers-mode 1)
   (global-hl-line-mode 1)
   (setq-default display-line-numbers-width 4))
+
+(setq visible-bell 1)
 
 (setq-default indent-tabs-mode nil)
 
@@ -47,6 +53,8 @@
 (setq mouse-wheel-scroll-amount '(1 ((shift) . 1))
       mouse-wheel-progressive-speed nil
       mouse-wheel-follow-mouse 't)
+
+(global-set-key (kbd "<mouse-8>") 'other-window)
 
 (defun beginning-or-nonspace ()
   "Move the point to the first non-space character, or, if the point is already there, to the first character."
@@ -71,7 +79,7 @@
   (global-set-key (kbd "C-M-[") (lambda () (interactive) (delimit-region "[" "]"))))
 
 (defun out-parens-quotes ()
-  "Move the point forward if it is between quotes or parens."
+  "Move the point forward to the next quote or closing paren."
   (interactive)
   (let ((next (string (following-char)))
         (quotes "\"")
@@ -144,6 +152,21 @@
   :ensure t
   :config
   (load-theme 'eclipse t))
+
+(defvar cycle-themes
+  (let ((themes-list (list 'eclipse)))
+    (nconc themes-list themes-list)))
+
+(defun cycle-themes* ()
+  "Cycle through the cycle-themes list."
+  (interactive)
+  (if-let* ((next-theme (cadr cycle-themes)))
+      (progn (when-let* ((current-theme (car cycle-themes)))
+               (disable-theme (car cycle-themes)))
+             (load-theme next-theme t)
+             (message "theme %s loaded" next-theme)))
+  (setq cycle-themes (cdr cycle-themes)))
+(global-set-key (kbd "<f5>") 'cycle-themes*)
 ;; ------------------------------------------------------------
 ;; ------------------------------------------------------------
 (use-package company
@@ -214,6 +237,14 @@
   :ensure t
   :config
   (add-hook 'irony-mode-hook #'irony-eldoc))
+
+(use-package ggtags
+  :ensure t
+  :config
+  (add-hook 'c-mode-common-hook
+            (lambda ()
+              (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+                (ggtags-mode 1)))))
 ;; ------------------------------------------------------------
 ;; ------------------------------------------------------------
 (use-package elpy
@@ -227,6 +258,11 @@
   :config
   (add-hook 'js-mode-hook 'indium-interaction-mode)
   (setq indium-chrome-executable "google-chrome-stable"))
+
+(use-package company-tern
+  :ensure t
+  :config
+  (add-hook 'js-mode-hook (lambda () (tern-mode))))
 ;; ------------------------------------------------------------
 ;; ------------------------------------------------------------
 (use-package bash-completion
@@ -240,7 +276,7 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (yasnippet-snippets yasnippet use-package magit irony-eldoc indium flycheck-irony elpy eclipse-theme counsel-projectile company-irony bash-completion ace-window))))
+    (yasnippet-snippets yasnippet use-package magit irony-eldoc indium ggtags flycheck-irony elpy eclipse-theme counsel-projectile company-tern company-irony bash-completion ace-window))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
